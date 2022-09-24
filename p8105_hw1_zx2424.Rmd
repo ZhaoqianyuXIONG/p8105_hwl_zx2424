@@ -1,0 +1,60 @@
+---
+title: "p8105_hw1_zx2424"
+output: github_document
+---
+```{r}
+library(tidyverse)
+```
+
+## Problem 1
+```{r}
+data("penguins", package = "palmerpenguins")
+nrow(penguins)
+ncol(penguins)
+summary(penguins)
+```
+
+Dataset "penguins" includes three species --"Adelie", "Chinstrap" and "Gentoo", three islands --"Biscoe", "Dream" and "Torgersen", bill_length_mm, bill_depth_mm, flipper_length_mm,  body_mass_g, sex--"female" and "male", and year.
+The "penguins" dataset includes 344 rows and 8 columns.
+The mean flipper length is 200.9.
+
+```{r}
+plot_fb = tibble(
+  x = pull(penguins, bill_length_mm),
+  y = pull(penguins, flipper_length_mm)
+)
+sp = pull(penguins, species)
+ggplot(plot_fb, aes(x = x, y = y, color = sp)) + geom_point()
+ggsave("first_scatterplot.pdf")
+``` 
+
+The plot above is a scatterplot of flipper_length_mm (y) vs bill_length_mm (x). The red points represent Adelle penguins, the green ones represent Chinstrap penguins, while the blue ones represents Gentoo penguins. And the scatterplot is exported to the project directory and named "first_scatterplot.pdf".
+
+## Problem 2
+Create a data frame.
+```{r}
+dataframe = tibble(
+  vec_numeric = rnorm(10, sd = 1),
+  vec_logical = vec_numeric > 0,
+  vec_char = c("A","B", "C", "D", "E", "F", "G", "H", "I", "J"),
+  vec_factor = factor(c("Low", "Middle", "High", "Low", "Middle", "High", "Low", "Middle", "High","High"))
+)
+```
+
+Try to take mean of each variable in the dataframe.
+```{r}
+mean(pull(dataframe, vec_numeric))
+mean(pull(dataframe, vec_logical))
+mean(pull(dataframe, vec_char))
+mean(pull(dataframe, vec_factor))
+```
+From the results of the above code, we can discover that taking the mean of numeric variables and logical variables works. And we are not able to take the mean of character variables and factor variables.
+
+```{r, eval = FALSE}
+as.numeric(pull(dataframe, vec_logical))
+as.numeric(pull(dataframe, vec_char))
+as.numeric(pull(dataframe, vec_factor))
+```
+Logical variables and factor variables can be converted to numeric variables, while the character variables cannot. Because for logical variables, "1" represents "TRUE", and "0" represents "FALSE". Consequently, its mean be calculated. And for factor vector, each different factor "level" can be converted a number. But before being converted to actual number, factor "levels" are not taken as numbers, so its mean cannot be calculated. Character variables cannot be represented by any number, contributing to the result "NA" when taking its mean. 
+
+
